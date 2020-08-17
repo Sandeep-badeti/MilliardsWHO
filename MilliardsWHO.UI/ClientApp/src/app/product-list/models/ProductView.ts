@@ -1,0 +1,34 @@
+export class ProductView {
+    productId: number;
+    name: string;
+    description: string;
+    mainSKU: string;
+    upc: string;
+    weight: number;
+    length: number;
+    height: number;
+    width: number;
+    shipsAlone_FLG: boolean;
+    statusId: number;
+    statusName: string;
+    weightUnitId: number;
+    weightUnitName: string;
+    dimensionUnitId: number;
+    dimensionName: string;
+    colorId: number;
+    colorName: string;
+    conditionId: number;
+    conditionName: string;
+    manufacturerId: number;
+    manufacturerName: string;
+    categoryId: number;
+    categoryName: string;
+    boxId: number;
+    boxName: string;
+    ref1: string;
+    ref2: string;
+    productSku: Array<any>;
+    productVersion: Array<any>;
+    productInventory: Array<any>;
+    productTag: Array<any>;
+}

@@ -1,0 +1,62 @@
+<div class="mainDiv">
+  <div *ngFor="let list of closeoutList">
+    <div class="mt-top">
+      <div class="form-group w-name-text">Warehouse Name : <span class="control-text">{{list.warehouse}}</span></div>
+
+    </div>
+    <div class="tab-sec">
+      <div class="row">
+        <div class="col-md-6">
+          <mat-checkbox name="DoneCheckoutPallatize" [(ngModel)]="list.doneCheckoutPallatize" [disabled]="true"> Done Closeout Palletizing for the day</mat-checkbox>
+        </div>
+        <div class="col-md-6">
+          <mat-checkbox name="DoneCheckoutPallatize" [(ngModel)]="doneCloseoutExitScan" [disabled]="true"> Done Closeout Exit Scan for the day</mat-checkbox>
+
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped table-sm dataTable no-footer">
+        <thead>
+          <tr>
+            <th>Ful Order ID</th>
+            <th>Order ID</th>
+            <th>Warehouse</th>
+            <th>Assigned Time stamp</th>
+            <th> Ship by Date</th>
+            <th>Ful Order Status</th>
+            <th>On Hold Flag</th>
+            <th>Error Flag​</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of list.fulFillCloseOutDetails">
+            <td> {{item.fulOrderId}}</td>
+            <td>{{item.orderId }}</td>
+            <td>{{item.warehouse}}</td>
+            <td>{{item.assignmentDate | date:'MM/dd/yyyy'}}</td>
+            <td>{{item.shipByDate | date:'MM/dd/yyyy'}}</td>
+            <td>{{item.fulOrderStatus}}</td>
+            <td>
+              <mat-checkbox name="onHoldFlag" [(ngModel)]="item.onHoldFlag" [disabled]="true"></mat-checkbox>
+            </td>
+            <td>
+              <mat-checkbox name="errorFlag" [(ngModel)]="item.errorFlag" [disabled]="true"></mat-checkbox>
+            </td>
+          </tr>
+        </tbody>
+        <!--<tbody *ngIf="closeoutList?.length == 0">
+          <tr>
+            <td colspan="8" class="no-data-available">{{'noData' | translate}}</td>
+          </tr>
+        <tbody>-->
+      </table>
+    </div>
+
+  </div>
+  <div class="col-md-12" *ngIf="closeoutList?.length == 0">
+    <span class="no-data-available">{{'noData' | translate}}</span>
+  </div>
+</div>
+

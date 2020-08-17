@@ -1,0 +1,277 @@
+<div class="mainDiv" *ngIf="fulOrderDetails">
+  <form [formGroup]="fulorderForm" (ngSubmit)="onSubmit()">
+    <div><h4 class="mainHeading mt-3">{{'viewFulOrderPage.title' | translate}}</h4></div>
+    <div class="mainDivBg viewDetails">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.fulOrderId' | translate}}</label>
+            <p>{{fulOrderDetails.fulOrderId}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.orderId' | translate}}</label>
+            <p>{{fulOrderDetails?.orderId}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.fulOrderStatus' | translate}}</label>
+            <p>{{fulOrderDetails.fulOrderStatus}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.cancelReason' | translate}}</label>
+            <p>{{fulOrderDetails.cancelReason}}</p>
+          </div>
+
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.assignedWareHouse' | translate}}</label>
+            <p>{{fulOrderDetails.assignedWareHouse}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.assignedCarrier' | translate}}</label>
+            <p>{{fulOrderDetails?.assignedCarrier}}</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.carrierUpdateDate' | translate}}</label>
+            <p>{{fulOrderDetails.carrierUpdateDate  | date:'MM/dd/yyyy'}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.box' | translate}}</label>
+            <p>{{fulOrderDetails?.box}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.assignedCarrierService' | translate}}</label>
+            <p>{{fulOrderDetails?.assignedCarrierService}}</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.pickingBatchId' | translate}}</label>
+            <p>{{fulOrderDetails?.pickingBatchId}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.labelBatchId' | translate}}</label>
+            <p>{{fulOrderDetails.labelBatchId}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.palletName' | translate}}</label>
+            <p>{{fulOrderDetails?.palletName}}</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.originalFulOrderId' | translate}}</label>
+            <p>{{fulOrderDetails.originalFulOrderId}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="lable-text">{{'viewFulOrderPage.onHoldFlag' | translate}}</label>
+            <p>
+              <mat-checkbox name="onHoldFlag" [(ngModel)]="fulOrderDetails.onHoldFlag" formControlName="onHoldFlag"></mat-checkbox>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label class="lable-text">{{'viewFulOrderPage.onHoldReason' | translate}}</label>
+            <p>
+              <select class="form-control" [(ngModel)]="fulOrderDetails.onHoldReason" name="onHoldReason"  [attr.disabled]="(!fulOrderDetails.onHoldFlag)? true : null" formControlName="onHoldReason" (change)="changeReason($event)">
+                <option [ngValue]="0">- Please Select -</option>
+                <option *ngFor="let obj of types.onHoldReasonList" [ngValue]="obj.onHoldReasonId">{{obj.name}}</option>
+              </select>
+              <span class="inputFocus"></span>
+              <small class="errorMs" *ngIf="submitted && !fulOrderDetails.onHoldReason && fulOrderDetails.onHoldFlag">
+                Please Select onHold Reason
+              </small>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label class="lable-text">{{'viewFulOrderPage.errorFlag' | translate}}</label>
+            <p>
+              <mat-checkbox [disabled]="!isEdit" name="errorFlag" [(ngModel)]="fulOrderDetails.errorFlag" formControlName="errorFlag"></mat-checkbox>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label class="lable-text">{{'viewFulOrderPage.errorReason' | translate}}</label>
+            <p>
+              <select class="form-control" formControlName="errorReason" [(ngModel)]="fulOrderDetails.errorReason"  name="errorReason" [attr.disabled]="(!fulOrderDetails.errorFlag || !isEdit) ? true : null" (change)="changeReason($event)">
+                <option [ngValue]="0">- Please Select -</option>
+                <option *ngFor="let obj of types.errorReasonList" [ngValue]="obj.errorReasonId">{{obj.name}}</option>
+              </select>
+              <span class="inputFocus"></span>
+              <small class="errorMs" *ngIf="submitted && fulOrderDetails.errorReason==0 && fulOrderDetails.errorFlag">
+                Please Select Error Reason
+              </small>
+            </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.isPrime' | translate}}</label>
+            <p>{{fulOrderDetails?.isPrime}}</p>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.carrierDescription' | translate}}</label>
+            <p>{{fulOrderDetails?.carrierDescription}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.shipByDate' | translate}}</label>
+            <p>{{fulOrderDetails?.shipByDate  | date:'MM/dd/yyyy'}}</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group clearfix">
+            <label>{{'viewFulOrderPage.assignmentDate' | translate}}</label>
+            <p>{{fulOrderDetails?.assignmentDate  | date:'MM/dd/yyyy'}}</p>
+          </div>
+        </div>
+
+      </div>
+
+      <h4 class="mainHeading mt-3">{{'viewFulOrderPage.fullItemDetails.title' | translate}}</h4>
+      <div *ngFor="let item of fulOrderDetails.fullItemDetails">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="mb-4 clearfix">
+              <label>{{'viewFulOrderPage.fullItemDetails.fulItemId' | translate}}</label>
+              <p>{{item.fulItemId}}</p>
+            </div>
+            <div class="mb-4 clearfix">
+              <label>{{'viewFulOrderPage.fullItemDetails.productId' | translate}}</label>
+              <p>{{item.productId}}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="mb-4 clearfix">
+              <label>{{'viewFulOrderPage.fullItemDetails.orderLineId' | translate}}</label>
+              <p>{{item.orderLineId}}</p>
+            </div>
+            <div class="mb-4 clearfix">
+              <label>{{'viewFulOrderPage.fullItemDetails.quantity' | translate}}</label>
+              <p>{{item.quantity}}</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="mb-4 clearfix">
+              <label>{{'viewFulOrderPage.fullItemDetails.sku' | translate}}</label>
+              <p>{{item.sku}}</p>
+            </div>
+            <div class="mb-4 clearfix">
+              <label>{{'viewFulOrderPage.fullItemDetails.productVersion' | translate}}</label>
+              <p>{{item.productVersion}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr />
+    <div class="float-right form-group">
+      <button *ngIf="!isEdit && fulOrderDetails.onHoldFlag && fulOrderDetails.onHoldReason==3" type="button" (click)="ShowCancelPopup()" class="allBtn primaryBtn">Cancel FulIfilment Order</button>
+      <button *ngIf="isEdit && fulOrderDetails.fulOrderStatus !='Cancelled'" type="submit" (click)="update()" class="allBtn primaryBtn">Update</button>
+      <button class="close-btn" (click)="closeFulOrderDetails()">
+        <span class="close_icon">
+          {{'btnClose' | translate}}
+        </span>
+      </button>
+    </div>
+    </form>
+</div>
+
+<div class="modal popupDiv" id="showFulorder" style="display: block; padding-left: 17px;" *ngIf="showFulorder"
+     role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="float-right">
+        <button type="button" class="close" (click)="closeFulorder()">
+          <i class="fa closeIcon"></i>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="fs15 fw500">{{message}}</p>
+        <div class="mt-5 mb-2">
+          <button type="button" class="allBtn primaryBtn" (click)="closeFulorder()">
+            <i class="fa check-mark"></i>
+            {{'ok' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal popupDiv" id="showErrorPopup" style="display: block; padding-left: 17px;" *ngIf="showErrorPopup"
+     role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="float-right">
+        <button type="button" class="close" (click)="closeError()">
+          <i class="fa closeIcon"></i>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="fs15 fw500">{{errorMessage}}</p>
+        <div class="mt-5 mb-2">
+          <button type="button" class="allBtn primaryBtn" (click)="closeError()">
+            <i class="fa check-mark"></i>
+            {{'ok' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal popupDiv" id="CancelPopup" style="display: block; padding-left: 17px;" *ngIf="CancelPopup"
+     role="dialog">
+  <div class="modal-dialog model-sm">
+    <div class="modal-content">
+      <div class="float-right">
+        <button type="button" class="close" (click)="closeCancelPopUp()">
+          <i class="fa closeIcon"></i>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="fs15 fw500">Are you sure you want to Cancel the Fulfilment Order?</p>
+        <div class="mt-5 mb-2">
+
+          <button type="button" class="allBtn primaryBtn" (click)="cancelFulfillment()">
+            {{'Ok' | translate}}
+          </button>
+          <button type="button" class="allBtn close-btn" (click)="closeCancelPopUp()">
+            {{'Cancel' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

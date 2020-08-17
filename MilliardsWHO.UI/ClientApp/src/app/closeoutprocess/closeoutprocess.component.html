@@ -1,0 +1,151 @@
+<div class="mainDiv">
+  <div class="clearfix">
+    <div class="float-left">
+      <h4 class="mainHeading">Close Out Process</h4>
+    </div>
+    <div class="float-right">
+      <div class="form-group">
+        <label class="lable-text">Warehouse</label>
+        <select class="form-control larg_input" placeholder="Warehouse" (change)="onWarehouseChange()" [(ngModel)]="selectedWarehouseId">
+          <option [ngValue]="0">- Select Warehouse -</option>
+          <option *ngFor="let obj of wareHouseList" [ngValue]="obj.warehouseId">
+            {{obj.name}}
+          </option>
+        </select>
+        <small class="errorMs" *ngIf="isWarehouseSelected">Please select warehouse </small>
+      </div>
+    </div>
+  </div>
+  <div class="tab-sec">
+    <div class="row">
+      <div class="col-md-6 text-center">
+        <div class="form-group">
+          <button href="" type="button" (click)="getCloseOutProcessDetails('1')"
+                  [disabled]="closeOutPalletizing" class="allBtn primaryBtn">
+            Closeout Palletizing
+          </button>
+        </div>
+        <div class="checkbox">
+          <!--<label class="largecheckbox">
+    <span class="closeout-input"> Done Closeout Palletizing for the day</span>
+    <img *ngIf="donePalletizing" src='assets/images/rightMark.png' />
+    <img *ngIf="!donePalletizing" src='assets/images/checkBox.png' />
+
+  </label>-->
+          <mat-checkbox name="onHoldFlag" [(ngModel)]="donePalletizing" [disabled]="true">Done Closeout Palletizing for the day</mat-checkbox>
+
+        </div>
+      </div>
+      <div class="col-md-6 text-center">
+        <div class="form-group">
+          <button href="" class="allBtn primaryBtn" (click)="getCloseOutProcessDetails('2')"
+                  [disabled]="closeOutExitScan">
+            Closeout ExitScan
+          </button>
+        </div>
+        <div class="checkbox">
+          <!--<label class="largecheckbox">
+    <span class="closeout-input">
+      Done Closeout Exit Scan for the day
+    </span>
+    <img *ngIf="doneExitScan" src='assets/images/rightMark.png' />
+    <img *ngIf="!doneExitScan" src='assets/images/checkBox.png' />
+  </label>-->
+          <mat-checkbox name="onHoldFlag" [(ngModel)]="doneExitScan" [disabled]="true">Done Closeout Exit Scan for the day</mat-checkbox>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm dataTable no-footer">
+      <thead>
+        <tr>
+          <th>Ful Order ID</th>
+          <th>Order ID</th>
+          <th>Warehouse</th>
+          <th>Assigned Time stamp</th>
+          <th> Ship by Date</th>
+          <th>Ful Order Status</th>
+          <th>On Hold Flag</th>
+          <th>Error Flag​</th>
+          <th colspan="2">Action</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="closeOutList?.length != 0">
+        <tr *ngFor="let list of closeOutList" [ngClass]="{'highlight' : list.onhold==true || list.errorFlag==true }">
+          <td>{{list.fulOrderId}}</td>
+          <td>{{list.orderId}}</td>
+          <td>{{list.warehouse}}</td>
+          <td>{{list.assignmentDate | date:'MM/dd/yyyy'}}</td>
+
+          <td>{{list.shipByDate | date:'MM/dd/yyyy'}}</td>
+
+          <td>{{list.fulOrderStatus}}</td>
+          <td>
+            <!--<img *ngIf="list.onHoldFlag" src='assets/images/rightMark.png' />
+  <img *ngIf="!list.onHoldFlag" src='assets/images/checkBox.png' />-->
+            <mat-checkbox name="onHoldFlag" [(ngModel)]="list.onHoldFlag" [disabled]="true"></mat-checkbox>
+
+          </td>
+          <td>
+            <!--<img *ngIf="list.errorFlag" src='assets/images/rightMark.png' />
+  <img *ngIf="!list.errorFlag" src='assets/images/checkBox.png' />-->
+            <mat-checkbox name="onHoldFlag" [(ngModel)]="list.errorFlag" [disabled]="true"></mat-checkbox>
+          </td>
+
+
+          <td>
+            <button class="allBtn primaryBtn Btn-sm" (click)="viewEditFullOrder(list)">View</button>
+
+            <button class="allBtn primaryBtn Btn-sm" [disabled]="!list.onHoldFlag && !list.errorFlag" (click)="viewEditFullOrder(list,true)">Edit </button>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="checkWareHouseSelected && closeOutList?.length == 0">
+        <tr>
+            <td colspan="10" class="no-data-available">{{'noData' | translate}}</td>
+        </tr>
+    <tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal popupDiv" id="showErrorPopup" style="display: block; padding-left: 17px;" *ngIf="showErrorPopup"
+     role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="float-right">
+        <button type="button" class="close" (click)="closeError()">
+          <i class="fa closeIcon"></i>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="fs15 fw500">{{message}}</p>
+        <div class="mt-5 mb-2">
+          <button type="button" class="allBtn primaryBtn" (click)="closeError()">
+            <i class="fa check-mark"></i>
+            {{'ok' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal popupDiv max-popup" id="viewFullOrderPopup" style="display: block; padding-left: 17px;" *ngIf="viewFullOrderPopup"
+     role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <!--<div class="float-right">
+        <button type="button" class="close" (click)="closeError()">
+          <i class="fa closeIcon"></i>
+        </button>
+      </div>-->
+      <div class="modal-body">
+        <app-view-fulorder (cancelPop)="cancelPopUp()"
+                           [viewFullOrder]="showFullOrder">
+        </app-view-fulorder>
+      </div>
+    </div>
+  </div>
+</div>
